@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{TITLE}} — Pocket Toolbox</title>
+  <meta name="description" content="{{DESCRIPTION}}">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/tools.css">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <style>
+    /* Global Toast Notification Styles */
+    #toast-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      pointer-events: none;
+    }
+    .toast {
+      background: var(--text-main);
+      color: #FFFFFF;
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      pointer-events: auto;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Modal Styles */
+    #shortcut-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(23, 23, 23, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    #shortcut-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      max-width: 450px;
+      width: 90%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    .modal-card h3 {
+      font-family: var(--font-serif);
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    .shortcut-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.95rem;
+    }
+    .shortcut-row kbd {
+      background: #FAF8F5;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.15rem 0.4rem;
+      font-family: monospace;
+      font-size: 0.85rem;
+    }
+
+    /* Confetti Canvas */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 99999;
+    }
+
+    /* Footer Quote Styling */
+    .quote-box {
+      margin-top: 2rem;
+      padding: 1rem 1.25rem;
+      background: #FAF8F5;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      user-select: none;
+      transition: border-color 0.2s ease;
+    }
+    .quote-box:hover {
+      border-color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="container">
+    <header>
+      <h1>Pocket Toolbox</h1>
+      <p>Minimalist, client-side web utilities. Fast, offline-first, no tracking.</p>
+    </header>
+
+    <!-- Instant Command / Search Bar -->
+    <div class="search-wrapper" style="margin-bottom: 2rem; position: relative;">
+      <input 
+        type="text" 
+        id="tool-search" 
+        placeholder="Type to filter tools... (Press '/' to focus, '?' for shortcuts)" 
+        autocomplete="off"
+        style="padding: 0.85rem 1.2rem; font-size: 1.05rem; border-radius: 10px; border: 1px solid var(--border); width: 100%; box-shadow: 0 2px 10px rgba(0,0,0,0.02);"
+      >
+    </div>
+
+    <main id="tool-content">
+      {{CONTENT}}
+    </main>
+
+    <!-- Indie Inspiration Quote Generator -->
+    <div class="quote-box" id="quote-trigger" title="Click for new inspiration">
+      <span id="quote-text">&ldquo;Make something people want.&rdquo; &mdash; Paul Graham</span>
+    </div>
+
+    <footer>
+      <p>Built with precision &bull; <a href="index.html">All Tools</a> &bull; Press <kbd>?</kbd> for shortcuts</p>
+    </footer>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- Keyboard Shortcuts Modal -->
+  <div id="shortcut-modal">
+    <div class="modal-card">
+      <h3>Keyboard Shortcuts</h3>
+      <div class="shortcut-row">
+        <span>Focus Search / Command Bar</span>
+        <kbd>/</kbd>
+      </div>
+      <div class="shortcut-row">
+        <span>Open Shortcuts Menu</span>
+        <kbd>?</kbd>
+      </div>
+      <div class="shortcut-row">
+        <span>Close Modal / Unfocus</span>
+        <kbd>Esc</kbd>
+      </div>
+      <div style="margin-top: 1.5rem; text-align: right;">
+        <button id="close-modal" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Global Toast Notification Helper
+    window.showToast = function(message) {
+      const container = document.getElementById("toast-container");
+      if (!container) return;
+
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.textContent = message;
+      container.appendChild(toast);
+
+      setTimeout(() => toast.classList.add("show"), 10);
+      setTimeout(() => {
+        toast.classList.remove("show");
+        setTimeout(() => toast.remove(), 250);
+      }, 2500);
+    };
+
+    // Zero-dependency Canvas Confetti Effect
+    window.triggerConfetti = function() {
+      const canvas = document.getElementById("confetti-canvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ["#C86B45", "#171717", "#D4A373", "#E63946", "#2A9D8F"];
+
+      for (let i = 0; i < 70; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          vx: (Math.random() - 0.5) * 12,
+          vy: (Math.random() - 0.8) * 12,
+          size: Math.random() * 6 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          opacity: 1
+        });
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let active = false;
+
+        particles.forEach(p => {
+          if (p.opacity <= 0) return;
+          active = true;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.3; // Gravity
+          p.opacity -= 0.015;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rotation * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = Math.max(0, p.opacity);
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+          ctx.restore();
+        });
+
+        if (active) requestAnimationFrame(render);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
+      render();
+    };
+
+    // Indie Quotes Array & Interactive Switcher
+    const quotes = [
+      "&ldquo;Make something people want.&rdquo; &mdash; Paul Graham",
+      "&ldquo;Simplicity is prerequisite for reliability.&rdquo; &mdash; Edsger W. Dijkstra",
+      "&ldquo;Done is better than perfect.&rdquo; &mdash; Sheryl Sandberg",
+      "&ldquo;Focus on being productive instead of busy.&rdquo; &mdash; Tim Ferriss",
+      "&ldquo;First, solve the problem. Then, write the code.&rdquo; &mdash; John Johnson",
+      "&ldquo;Small software made with care is a work of art.&rdquo; &mdash; Indie Hacker Proverb"
+    ];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const searchInput = document.getElementById("tool-search");
+      const modal = document.getElementById("shortcut-modal");
+      const closeModalBtn = document.getElementById("close-modal");
+      const quoteTrigger = document.getElementById("quote-trigger");
+      const quoteText = document.getElementById("quote-text");
+
+      if (quoteTrigger && quoteText) {
+        quoteTrigger.addEventListener("click", () => {
+          const randomIndex = Math.floor(Math.random() * quotes.length);
+          quoteText.innerHTML = quotes[randomIndex];
+          window.showToast("New inspiration loaded!");
+        });
+      }
+
+      // Keyboard shortcuts handling
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "/" && document.activeElement !== searchInput && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA") {
+          e.preventDefault();
+          if (searchInput) searchInput.focus();
+        }
+        if (e.key === "?" && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA") {
+          e.preventDefault();
+          modal.classList.add("active");
+        }
+        if (e.key === "Escape") {
+          modal.classList.remove("active");
+          if (searchInput) searchInput.blur();
+        }
+      });
+
+      if (closeModalBtn) closeModalBtn.addEventListener("click", () => modal.classList.remove("active"));
+      if (modal) {
+        modal.addEventListener("click", (e) => {
+          if (e.target === modal) modal.classList.remove("active");
+        });
+      }
+
+      if (searchInput) {
+        searchInput.addEventListener("input", (e) => {
+          const query = e.target.value.toLowerCase().trim();
+          const cards = document.querySelectorAll(".tool-card, .card-item, .tool-grid > a");
+          
+          cards.forEach(card => {
+            const text = card.textContent.toLowerCase();
+            card.style.display = text.includes(query) ? "" : "none";
+          });
+        });
+      }
+    });
+  </script>
+</body>
+</html>

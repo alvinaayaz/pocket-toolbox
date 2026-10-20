@@ -1,0 +1,15 @@
+{
+  "name": "Pocket Toolbox",
+  "short_name": "Toolbox",
+  "description": "12 free everyday tools in one place.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#5148CF",
+  "theme_color": "#5148CF",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

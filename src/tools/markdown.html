@@ -1,0 +1,62 @@
+<div class="card">
+  <h2>Markdown Previewer</h2>
+  <p>Type markdown on the left, see the live rendered preview on the right. Runs 100% client-side.</p>
+  
+  <div class="row" style="margin-top: 1.5rem; gap: 1rem;">
+    <div style="flex: 1; display: flex; flex-direction: column;">
+      <label for="md-input">Markdown Source</label>
+      <textarea id="md-input" rows="12" placeholder="# Hello World&#10;&#10;Type your **markdown** here..." style="font-family: monospace; font-size: 0.9rem; resize: vertical;"></textarea>
+    </div>
+    <div style="flex: 1; display: flex; flex-direction: column;">
+      <label>Live Preview</label>
+      <div id="md-preview" style="background: #FAF8F5; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; min-height: 260px; max-height: 400px; overflow-y: auto; font-size: 0.95rem;">
+        <span style="color: var(--text-muted);">Preview will appear here...</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+    <button id="copy-md">Copy Markdown</button>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("md-input");
+    const preview = document.getElementById("md-preview");
+    const copyBtn = document.getElementById("copy-md");
+
+    // Simple light markdown renderer (headers, bold, italic, lists, paragraphs)
+    function renderMarkdown(text) {
+      if (!text.trim()) return "<span style=\"color: var(--text-muted);\">Preview will appear here...</span>";
+      
+      let html = text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        // Headers
+        .replace(/^### (.*$)/gim, "<h3>$1</h3>")
+        .replace(/^## (.*$)/gim, "<h2>$1</h2>")
+        .replace(/^# (.*$)/gim, "<h1>$1</h1>")
+        // Bold & Italic
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+        .replace(/\*(.*?)\*\*/g, "<em>$1</em>")
+        // Code blocks / inline code
+        .replace(/`(.*?)`/g, "<code style=\"background:#E3DED7; padding:0.2rem 0.4rem; border-radius:4px;\">$1</code>")
+        // Line breaks to paragraphs
+        .split("\n\n").map(para => `<p style="margin-bottom: 0.75rem;">${para.replace(/\n/g, "<br>")}</p>`).join("");
+
+      return html;
+    }
+
+    input.addEventListener("input", () => {
+      preview.innerHTML = renderMarkdown(input.value);
+    });
+
+    copyBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText(input.value).then(() => {
+        showToast("Markdown copied to clipboard!");
+      });
+    });
+  });
+</script>

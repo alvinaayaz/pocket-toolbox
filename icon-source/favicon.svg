@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024"><defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3f45e0"/><stop offset=".55" stop-color="#5a49ea"/><stop offset="1" stop-color="#7a4cf1"/></linearGradient>
+<radialGradient id="glow" cx=".5" cy=".46" r=".55"><stop offset="0" stop-color="#fff" stop-opacity=".16"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="slope" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5148"/><stop offset="1" stop-color="#f23a3d"/></linearGradient>
+<linearGradient id="band" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e21f2b"/><stop offset="1" stop-color="#d11827"/></linearGradient>
+<linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dc1c29"/><stop offset="1" stop-color="#c41322"/></linearGradient>
+<linearGradient id="side" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".14"/><stop offset=".07" stop-color="#fff" stop-opacity="0"/><stop offset=".93" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".16"/></linearGradient>
+<linearGradient id="handle" gradientUnits="userSpaceOnUse" x1="0" y1="231" x2="0" y2="287"><stop offset="0" stop-color="#686974"/><stop offset=".5" stop-color="#363742"/><stop offset="1" stop-color="#1f2028"/></linearGradient>
+<linearGradient id="plate" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#86b6d8"/><stop offset="1" stop-color="#4b80aa"/></linearGradient>
+<linearGradient id="latch" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e3f5fc"/><stop offset=".5" stop-color="#abd8ef"/><stop offset="1" stop-color="#84bbde"/></linearGradient>
+<filter id="blur" x="-20%" y="-300%" width="140%" height="700%"><feGaussianBlur stdDeviation="11"/></filter>
+<filter id="ds" x="-50%" y="-30%" width="200%" height="180%"><feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#5b0610" flood-opacity=".5"/></filter>
+</defs><rect width="1024" height="1024" fill="url(#bg)"/><rect width="1024" height="1024" fill="url(#glow)"/><g transform="translate(512,512) scale(1.2) translate(-512,-512) translate(0,3)">
+<!-- seam shadow sits behind lid and body -->
+<rect x="188" y="526" width="648" height="14" fill="#6a0b15"/>
+<!-- lid: sloped top + front band -->
+<path d="M282 330 L742 330 Q752 330 760 336 L804 366 Q814 373 818 385 L834 436 Q836 442 836 450 L836 522 Q836 530 828 530 L196 530 Q188 530 188 522 L188 450 Q188 442 190 436 L206 385 Q210 373 220 366 L264 336 Q272 330 282 330 Z" fill="url(#slope)"/>
+<path d="M188 450 L836 450 L836 522 Q836 530 828 530 L196 530 Q188 530 188 522 Z" fill="url(#band)"/>
+<line x1="190" y1="450" x2="834" y2="450" stroke="#a80f1c" stroke-opacity=".35" stroke-width="3"/>
+<path d="M290 338 L734 338" stroke="#fff" stroke-opacity=".38" stroke-width="4" stroke-linecap="round"/>
+<!-- body -->
+<path d="M188 538 L836 538 L836 756 Q836 786 806 786 L218 786 Q188 786 188 756 Z" fill="url(#body)"/>
+<path d="M188 538 L836 538 L836 756 Q836 786 806 786 L218 786 Q188 786 188 756 Z" fill="url(#side)"/>
+<path d="M188 450 L836 450 L836 522 Q836 530 828 530 L196 530 Q188 530 188 522 Z" fill="url(#side)"/>
+<line x1="192" y1="540" x2="832" y2="540" stroke="#ff6a63" stroke-opacity=".45" stroke-width="3"/>
+<!-- handle -->
+<rect x="338" y="316" width="88" height="30" rx="12" fill="#23242c"/>
+<rect x="598" y="316" width="88" height="30" rx="12" fill="#23242c"/>
+<path d="M382 326 L408 278 Q420 256 448 256 L576 256 Q604 256 616 278 L642 326" fill="none" stroke="url(#handle)" stroke-width="50" stroke-linejoin="round"/>
+<path d="M412 276 Q422 262 448 262 L576 262 Q602 262 612 276" fill="none" stroke="#fff" stroke-opacity=".2" stroke-width="7" stroke-linecap="round"/>
+<g transform="translate(342,0)" filter="url(#ds)">
+  <rect x="-47" y="508" width="94" height="54" rx="13" fill="url(#plate)"/>
+  <rect x="-30" y="490" width="60" height="124" rx="21" fill="url(#latch)"/>
+  <path d="M-21 507 Q0 499 21 507" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="4" stroke-linecap="round"/>
+  <rect x="-22" y="527" width="44" height="13" rx="4" fill="#25496a"/>
+  <rect x="-22" y="540" width="44" height="2.5" rx="1.2" fill="#fff" fill-opacity=".4"/>
+</g>
+<g transform="translate(682,0)" filter="url(#ds)">
+  <rect x="-47" y="508" width="94" height="54" rx="13" fill="url(#plate)"/>
+  <rect x="-30" y="490" width="60" height="124" rx="21" fill="url(#latch)"/>
+  <path d="M-21 507 Q0 499 21 507" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="4" stroke-linecap="round"/>
+  <rect x="-22" y="527" width="44" height="13" rx="4" fill="#25496a"/>
+  <rect x="-22" y="540" width="44" height="2.5" rx="1.2" fill="#fff" fill-opacity=".4"/>
+</g>
+</g></svg>

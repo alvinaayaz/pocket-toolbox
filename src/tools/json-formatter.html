@@ -1,0 +1,71 @@
+<div class="card">
+  <h2>JSON Formatter & Validator</h2>
+  <p>Instantly beautify, minify, and validate JSON data entirely offline with clear syntax feedback.</p>
+  
+  <div class="form-group" style="margin-top: 1.5rem;">
+    <label for="json-input">Input JSON</label>
+    <textarea id="json-input" rows="8" placeholder="{ &quot;name&quot;: &quot;Pocket Toolbox&quot;, &quot;version&quot;: 1.0 }" style="font-family: monospace; font-size: 0.9rem; resize: vertical;"></textarea>
+  </div>
+
+  <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+    <button id="btn-beautify">Beautify (2 Spaces)</button>
+    <button id="btn-minify" style="background-color: var(--text-muted);">Minify</button>
+    <button id="btn-validate" style="background-color: var(--accent);">Validate</button>
+    <button id="btn-copy" style="background-color: transparent; color: var(--text-main); border: 1px solid var(--border);">Copy Output</button>
+  </div>
+
+  <div class="form-group">
+    <label>Output / Status</label>
+    <div id="json-status" style="font-size: 0.85rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-muted);">Status: Ready</div>
+    <textarea id="json-output" rows="8" readonly placeholder="Formatted output will appear here..." style="font-family: monospace; font-size: 0.9rem; background: #FAF8F5; resize: vertical;"></textarea>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("json-input");
+    const output = document.getElementById("json-output");
+    const status = document.getElementById("json-status");
+
+    function setStatus(msg, isError = false) {
+      status.textContent = "Status: " + msg;
+      status.style.color = isError ? "#C86B45" : "var(--text-muted)";
+    }
+
+    document.getElementById("btn-beautify").addEventListener("click", () => {
+      try {
+        const parsed = JSON.parse(input.value);
+        output.value = JSON.stringify(parsed, null, 2);
+        setStatus("Valid JSON (Beautified)");
+      } catch (err) {
+        setStatus("Invalid JSON: " + err.message, true);
+      }
+    });
+
+    document.getElementById("btn-minify").addEventListener("click", () => {
+      try {
+        const parsed = JSON.parse(input.value);
+        output.value = JSON.stringify(parsed);
+        setStatus("Valid JSON (Minified)");
+      } catch (err) {
+        setStatus("Invalid JSON: " + err.message, true);
+      }
+    });
+
+    document.getElementById("btn-validate").addEventListener("click", () => {
+      try {
+        JSON.parse(input.value);
+        setStatus("JSON is valid!");
+      } catch (err) {
+        setStatus("Invalid JSON: " + err.message, true);
+      }
+    });
+
+    document.getElementById("btn-copy").addEventListener("click", () => {
+      if (!output.value) return;
+      navigator.clipboard.writeText(output.value).then(() => {
+        showToast("Copied JSON output to clipboard!");
+      });
+    });
+  });
+</script>

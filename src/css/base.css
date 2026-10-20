@@ -1,0 +1,131 @@
+/* =================================================================
+   Pocket Toolbox — Editorial Design System
+   ================================================================= */
+
+:root {
+  --bg-primary: #F6F3EE;
+  --bg-card: #FFFFFF;
+  --text-main: #171717;
+  --text-muted: #666666;
+  --accent: #C86B45;
+  --accent-hover: #B25A38;
+  --border: #E3DED7;
+  --border-focus: #171717;
+  --radius: 12px;
+  --shadow: 0 4px 20px rgba(23, 23, 23, 0.04);
+  --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: 'Fraunces', Georgia, serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  padding: 2rem 1rem;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+header {
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+header h1 {
+  font-family: var(--font-serif);
+  font-size: 2.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+}
+
+header p {
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 1.5rem;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--text-main);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 2px rgba(23, 23, 23, 0.08);
+}
+
+button, .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--text-main);
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+button:hover, .btn:hover {
+  background-color: var(--accent);
+}
+
+button:active, .btn:active {
+  transform: scale(0.98);
+}
+
+label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--text-main);
+  display: block;
+}
+
+footer {
+  text-align: center;
+  margin-top: 3rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+footer a {
+  color: var(--text-main);
+  text-decoration: underline;
+}
+

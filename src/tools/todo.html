@@ -1,0 +1,70 @@
+<div class="card">
+  <h2>Minimal To-Do List</h2>
+  <p>Track tasks locally in your browser session.</p>
+
+  <div class="row" style="margin-top: 1.5rem; gap: 0.5rem;">
+    <input type="text" id="todo-input" placeholder="Add a new task..." style="flex: 1;">
+    <button id="todo-add">Add Task</button>
+  </div>
+
+  <ul id="todo-list" style="list-style: none; padding: 0; margin-top: 1.5rem;"></ul>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("todo-input");
+    const addBtn = document.getElementById("todo-add");
+    const list = document.getElementById("todo-list");
+
+    function checkCompletion() {
+      const checkboxes = list.querySelectorAll("input[type=\"checkbox\"]");
+      if (checkboxes.length > 0 && Array.from(checkboxes).every(cb => cb.checked)) {
+        if (window.triggerConfetti) window.triggerConfetti();
+        if (window.showToast) window.showToast("All tasks completed! Amazing work ??");
+      }
+    }
+
+    function addTask(text) {
+      if (!text.trim()) return;
+
+      const li = document.createElement("li");
+      li.style.cssText = "display: flex; align-items: center; justify-content: space-between; padding: 0.75rem; border-bottom: 1px solid var(--border);";
+      
+      const label = document.createElement("label");
+      label.style.cssText = "display: flex; align-items: center; gap: 0.5rem; cursor: pointer; flex: 1;";
+
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.addEventListener("change", () => {
+        span.style.textDecoration = cb.checked ? "line-through" : "none";
+        span.style.color = cb.checked ? "var(--text-muted)" : "var(--text-main)";
+        checkCompletion();
+      });
+
+      const span = document.createElement("span");
+      span.textContent = text;
+
+      label.appendChild(cb);
+      label.appendChild(span);
+
+      const delBtn = document.createElement("button");
+      delBtn.textContent = "?";
+      delBtn.style.cssText = "background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem; padding: 0.2rem 0.5rem;";
+      delBtn.addEventListener("click", () => {
+        li.remove();
+        checkCompletion();
+      });
+
+      li.appendChild(label);
+      li.appendChild(delBtn);
+      list.appendChild(li);
+
+      input.value = "";
+    }
+
+    addBtn.addEventListener("click", () => addTask(input.value));
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") addTask(input.value);
+    });
+  });
+</script>
