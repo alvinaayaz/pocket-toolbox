@@ -10,7 +10,7 @@
      refreshed in the background, so they are fast, work offline and never stay stale.
    - Only good (HTTP 200, same-site) responses are saved. Errors are never cached.
    - Every new VERSION deletes the old caches. */
-const VERSION = '8302a98f68';
+const VERSION = 'fe43a8757a';
 const CACHE = 'pocket-toolbox-' + VERSION;
 const PRECACHE = [
   "./",
